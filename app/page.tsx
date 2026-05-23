@@ -51,7 +51,13 @@ interface EarningsRecord {
 }
 
 export default function Home() {
-  // Navigation State
+  // Authentication & Navigation State
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [activeTab, setActiveTab] = useState<"dashboard" | "ride-requests" | "earnings" | "users" | "profile">("dashboard");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [usersSidebarExpanded, setUsersSidebarExpanded] = useState(true);
@@ -61,9 +67,21 @@ export default function Home() {
     name: "Alexa Cuarto",
     email: "admin@alexa.com",
     status: "Active",
-    password: "•••••••••",
-    avatarSeed: "alexa"
+    password: "password123",
+    avatarSeed: "alexa",
+    avatarColor: "#38bdf8"
   });
+
+  // Admin Profile Actions Modals State
+  const [showChangePasswordSubModal, setShowChangePasswordSubModal] = useState(false);
+  const [showEditNameSubModal, setShowEditNameSubModal] = useState(false);
+  const [showChangePictureSubModal, setShowChangePictureSubModal] = useState(false);
+
+  const [currentProfilePasswordInput, setCurrentProfilePasswordInput] = useState("");
+  const [newProfilePasswordInput, setNewProfilePasswordInput] = useState("");
+  const [confirmProfilePasswordInput, setConfirmProfilePasswordInput] = useState("");
+  const [newProfileNameInput, setNewProfileNameInput] = useState("");
+  const [profileActionError, setProfileActionError] = useState("");
 
   // Drivers List (Mock data to support 5 pages of pagination)
   const [drivers, setDrivers] = useState<Driver[]>([
@@ -219,6 +237,7 @@ export default function Home() {
   const [driverSearch, setDriverSearch] = useState("");
   const [requestSearch, setRequestSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("Ongoing"); // Defaults to Ongoing as per screenshot!
+  const [activeStatModal, setActiveStatModal] = useState<string | null>(null);
 
   // Filters for Ride Requests
   const [requestTodaFilter, setRequestTodaFilter] = useState("All");
@@ -521,7 +540,160 @@ export default function Home() {
       return matchToda && matchDriver;
     });
   }, [earningsRecords, earningsTodaFilter, earningsDriverFilter]);
+  if (!isLoggedIn) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#bde5ff] p-4 text-center select-none font-sans">
+        <div className="flex flex-col items-center w-full max-w-sm">
+          {/* Tricycle Logo */}
+          <svg width="120" height="90" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#091b6f] mb-2">
+            {/* Sidecar Roof visor */}
+            <path d="M36 32h32v3H36z" fill="currentColor" />
+            <path d="M68 32c5 0 24-2 24-2v3s-19 2-24 2z" fill="currentColor" />
 
+            {/* Sidecar Main Body */}
+            <rect x="34" y="36" width="34" height="20" rx="4" fill="currentColor" />
+            {/* Sidecar Window (cutout matching login bg #bde5ff) */}
+            <rect x="40" y="40" width="22" height="11" rx="2" fill="#bde5ff" />
+
+            {/* Sidecar Bottom Stripes */}
+            <rect x="34" y="58" width="34" height="2" fill="currentColor" />
+            <rect x="34" y="62" width="34" height="2" fill="currentColor" />
+            <rect x="34" y="66" width="34" height="4" rx="1" fill="currentColor" />
+
+            {/* Sidecar Wheel */}
+            <rect x="28" y="52" width="6" height="18" rx="3" fill="currentColor" />
+
+            {/* Connecting bar to motorcycle */}
+            <rect x="68" y="56" width="10" height="2" fill="currentColor" />
+            <rect x="68" y="64" width="10" height="2" fill="currentColor" />
+
+            {/* Motorcycle Body/Shield */}
+            <rect x="76" y="48" width="12" height="18" rx="3" fill="currentColor" />
+            <rect x="72" y="49" width="20" height="2.5" fill="currentColor" /> {/* Handlebars */}
+            <circle cx="82" cy="46" r="2" fill="#bde5ff" /> {/* Headlight cutout */}
+
+            {/* Motorcycle Front Wheel */}
+            <rect x="80" y="62" width="5" height="14" rx="2.5" fill="currentColor" />
+          </svg>
+
+          {/* App Name */}
+          <h1 className="text-[#091b6f] font-extrabold text-[15px] tracking-wide text-center leading-none">
+            Tayabas TODA Go
+          </h1>
+          <p className="text-[#2563eb] text-[10px] font-bold tracking-wider uppercase mt-1">
+            Booking App
+          </p>
+
+          {/* Welcome Headers */}
+          <h2 className="text-[#091b6f] font-extrabold text-3xl tracking-wide mt-10 mb-1">
+            Welcome Admin
+          </h2>
+          <p className="text-slate-600 text-xs font-semibold mb-8">
+            Log in to your admin account
+          </p>
+
+          {/* Form */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!loginEmail || !loginPassword) {
+                setLoginError("Please enter both email and password.");
+                return;
+              }
+              if (!loginEmail.includes("@")) {
+                setLoginError("Please enter a valid email address.");
+                return;
+              }
+              setIsLoggedIn(true);
+              setLoginError("");
+            }}
+            className="w-full flex flex-col gap-4"
+          >
+            {/* Email Field */}
+            <div className="flex flex-col gap-1.5 w-full">
+              <label className="text-[#091b6f]/80 text-xs font-extrabold self-start pl-1">
+                Email
+              </label>
+              <div className="bg-[#040a5a] text-white rounded-2xl flex items-center px-4.5 py-3.5 shadow-inner w-full border border-[#040a5a] focus-within:ring-2 focus-within:ring-blue-400 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80 mr-3 shrink-0">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={loginEmail}
+                  onChange={(e) => {
+                    setLoginEmail(e.target.value);
+                    if (loginError) setLoginError("");
+                  }}
+                  className="bg-transparent border-none outline-none text-white placeholder-white/40 text-sm font-semibold w-full"
+                  style={{ backgroundColor: "transparent", color: "white" }}
+                />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="flex flex-col gap-1.5 w-full">
+              <label className="text-[#091b6f]/80 text-xs font-extrabold self-start pl-1">
+                Password
+              </label>
+              <div className="bg-[#040a5a] text-white rounded-2xl flex items-center px-4.5 py-3.5 shadow-inner w-full border border-[#040a5a] focus-within:ring-2 focus-within:ring-blue-400 transition-all relative">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80 mr-3 shrink-0">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={loginPassword}
+                  onChange={(e) => {
+                    setLoginPassword(e.target.value);
+                    if (loginError) setLoginError("");
+                  }}
+                  className="bg-transparent border-none outline-none text-white placeholder-white/40 text-sm font-semibold w-full pr-10"
+                  style={{ backgroundColor: "transparent", color: "white" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 text-white/70 hover:text-white transition-colors cursor-pointer"
+                  aria-label="Toggle Password Visibility"
+                >
+                  {showPassword ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                      <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Error Message */}
+            {loginError && (
+              <p className="text-rose-600 text-xs font-bold text-center mt-1">
+                {loginError}
+              </p>
+            )}
+
+            {/* Login Button */}
+            <button
+              type="submit"
+              className="bg-[#4f73f6] hover:bg-blue-600 active:bg-blue-700 text-white font-extrabold text-sm py-4 px-6 rounded-2xl w-full shadow-md hover:shadow-lg transition-all cursor-pointer mt-4"
+            >
+              Login
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col flex-1 h-screen overflow-hidden font-sans">
@@ -563,7 +735,7 @@ export default function Home() {
           {/* Beautiful Custom Avatar */}
           <div className="relative">
             <svg width="38" height="38" viewBox="0 0 40 40" className="rounded-full shadow-inner border-2 border-sky-300">
-              <circle cx="20" cy="20" r="18" fill="#38bdf8" />
+              <circle cx="20" cy="20" r="18" fill={adminProfile.avatarColor || "#38bdf8"} />
               <mask id="mask-avatar" maskUnits="userSpaceOnUse" x="2" y="2" width="36" height="36">
                 <circle cx="20" cy="20" r="18" fill="#FFFFFF" />
               </mask>
@@ -729,11 +901,6 @@ export default function Home() {
             </div>
           </nav>
 
-          {/* Footer of Sidebar */}
-          <div className="p-4 border-t border-[#b2e1fc]/50 text-center">
-            <p className="text-[10px] text-[#091b6f]/60 font-semibold">TodaGo Dashboard v1.2</p>
-            <p className="text-[9px] text-[#091b6f]/40 font-medium">Baguio City, Philippines</p>
-          </div>
         </aside>
 
         {/* Sidebar Overlay for Mobile */}
@@ -754,7 +921,10 @@ export default function Home() {
               {/* Stat Cards Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Total Drivers */}
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] transition-all duration-200">
+                <div
+                  onClick={() => setActiveStatModal("total-drivers")}
+                  className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] hover:border-amber-200 transition-all duration-200 cursor-pointer"
+                >
                   <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center text-amber-500 shrink-0">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -769,7 +939,10 @@ export default function Home() {
                 </div>
 
                 {/* Active Drivers */}
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] transition-all duration-200">
+                <div
+                  onClick={() => setActiveStatModal("active-drivers")}
+                  className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] hover:border-emerald-200 transition-all duration-200 cursor-pointer"
+                >
                   <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500 shrink-0">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
@@ -783,7 +956,10 @@ export default function Home() {
                 </div>
 
                 {/* Users */}
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] transition-all duration-200">
+                <div
+                  onClick={() => setActiveStatModal("users")}
+                  className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] hover:border-indigo-200 transition-all duration-200 cursor-pointer"
+                >
                   <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-500 shrink-0">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -799,7 +975,10 @@ export default function Home() {
                 </div>
 
                 {/* Trips Today */}
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] transition-all duration-200">
+                <div
+                  onClick={() => setActiveStatModal("trips-today")}
+                  className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] hover:border-rose-200 transition-all duration-200 cursor-pointer"
+                >
                   <div className="w-12 h-12 bg-rose-50 rounded-full flex items-center justify-center text-rose-500 shrink-0">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="5.5" cy="18.5" r="2.5" />
@@ -956,21 +1135,21 @@ export default function Home() {
                       <table className="w-full text-left border-collapse">
                         <thead>
                           <tr className="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                            <th className="pb-3 pl-2">Passenger</th>
-                            <th className="pb-3">Driver</th>
-                            <th className="pb-3">Location</th>
-                            <th className="pb-3 text-right pr-2">Status</th>
+                            <th className="pb-3 pl-3 text-left">Passenger</th>
+                            <th className="pb-3 px-3 text-left">Driver</th>
+                            <th className="pb-3 px-3 text-left">Location</th>
+                            <th className="pb-3 text-right pr-3">Status</th>
                           </tr>
                         </thead>
                         <tbody className="text-sm font-semibold divide-y divide-slate-50">
                           {rideRequests.slice(0, 3).map((r) => (
                             <tr key={r.id} className="hover:bg-slate-50/50 transition-colors">
-                              <td className="py-3 pl-2 text-slate-700">{r.passenger}</td>
-                              <td className="py-3 text-slate-600">{r.driver}</td>
-                              <td className="py-3 text-slate-500">{r.location}</td>
-                              <td className="py-3 text-right pr-2">
+                              <td className="py-3.5 pl-3 text-left text-slate-700">{r.passenger}</td>
+                              <td className="py-3.5 px-3 text-left text-slate-600">{r.driver}</td>
+                              <td className="py-3.5 px-3 text-left text-slate-500">{r.location}</td>
+                              <td className="py-3.5 text-right pr-3">
                                 <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${r.status === "Completed" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" :
-                                  r.status === "Ongoing" ? "bg-blue-50 text-blue-600 border border-blue-100" :
+                                  r.status === "In Transit" ? "bg-blue-50 text-blue-600 border border-blue-100" :
                                     "bg-amber-50 text-amber-600 border border-amber-100"
                                   }`}>
                                   {r.status}
@@ -992,11 +1171,6 @@ export default function Home() {
                   <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
                     <div className="flex items-center justify-between mb-4">
                       <h2 className="text-[#091b6f] font-bold text-lg">Quick Actions</h2>
-                      <div className="text-slate-300 hover:text-slate-500 cursor-pointer">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                          <circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" />
-                        </svg>
-                      </div>
                     </div>
 
                     <button
@@ -1029,20 +1203,20 @@ export default function Home() {
                       <table className="w-full text-left border-collapse">
                         <thead>
                           <tr className="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                            <th className="pb-3 pl-2">Driver</th>
-                            <th className="pb-3">TODA</th>
-                            <th className="pb-3 text-right pr-2">Status</th>
+                            <th className="pb-3 pl-3 text-left">Driver</th>
+                            <th className="pb-3 px-3 text-left">TODA</th>
+                            <th className="pb-3 text-right pr-3">Status</th>
                           </tr>
                         </thead>
                         <tbody className="text-sm font-semibold divide-y divide-slate-50">
                           {drivers.slice(0, 3).map((d) => (
                             <tr key={d.id} className="hover:bg-slate-50/50 transition-colors group">
-                              <td className="py-3 pl-2">
+                              <td className="py-3.5 pl-3 text-left">
                                 <p className="text-slate-700">{d.name}</p>
                                 <p className="text-[10px] text-slate-400">{d.bodyNumber}</p>
                               </td>
-                              <td className="py-3 text-slate-600">{d.toda}</td>
-                              <td className="py-3 text-right pr-2">
+                              <td className="py-3.5 px-3 text-left text-slate-600 max-w-[150px] truncate" title={d.toda}>{d.toda}</td>
+                              <td className="py-3.5 pr-3 text-right">
                                 <div className="flex items-center justify-end gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
                                   <button
                                     onClick={() => {
@@ -1053,7 +1227,9 @@ export default function Home() {
                                         license: d.license,
                                         bodyNumber: d.bodyNumber,
                                         toda: d.toda,
-                                        status: d.status
+                                        status: d.status,
+                                        email: d.email || "",
+                                        plateNumber: d.plateNumber || ""
                                       });
                                       setShowEditDriverModal(true);
                                     }}
@@ -1083,11 +1259,6 @@ export default function Home() {
                   <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
                     <div className="flex items-center justify-between mb-4">
                       <h2 className="text-[#091b6f] font-bold text-lg">Earnings Summary</h2>
-                      <div className="text-slate-300 hover:text-slate-500 cursor-pointer">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                          <circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" />
-                        </svg>
-                      </div>
                     </div>
 
                     <div className="flex flex-col gap-4">
@@ -1132,133 +1303,7 @@ export default function Home() {
             </div>
           )}
 
-          {/* Active Tab: Create Driver Account */}
-          {activeTab === "create-driver" && (
-            <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-              <h2 className="text-[#091b6f] font-bold text-xl mb-1">Create Driver Account</h2>
-              <p className="text-slate-400 text-xs font-semibold mb-6">Register a new tricycle driver in the TodaGo ride-hailing database.</p>
 
-              <form onSubmit={handleAddDriver} className="flex flex-col gap-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-slate-500 font-bold uppercase tracking-wider">First Name</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Juan"
-                      value={formData.firstName}
-                      onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                      className="border border-slate-200 rounded-lg px-3.5 py-2 text-sm font-semibold outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-slate-500 font-bold uppercase tracking-wider">Last Name</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Dela Cruz"
-                      value={formData.lastName}
-                      onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
-                      className="border border-slate-200 rounded-lg px-3.5 py-2 text-sm font-semibold outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-slate-500 font-bold uppercase tracking-wider">Phone Number</label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="e.g. 09123456789"
-                      value={formData.phone}
-                      onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                      className="border border-slate-200 rounded-lg px-3.5 py-2 text-sm font-semibold outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-slate-500 font-bold uppercase tracking-wider">Driver License Number</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. N01-23-456789"
-                      value={formData.license}
-                      onChange={(e) => setFormData(prev => ({ ...prev, license: e.target.value }))}
-                      className="border border-slate-200 rounded-lg px-3.5 py-2 text-sm font-semibold outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-slate-500 font-bold uppercase tracking-wider">Tricycle Body Number</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. T-1042"
-                      value={formData.bodyNumber}
-                      onChange={(e) => setFormData(prev => ({ ...prev, bodyNumber: e.target.value }))}
-                      className="border border-slate-200 rounded-lg px-3.5 py-2 text-sm font-semibold outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-slate-500 font-bold uppercase tracking-wider">TODA Association</label>
-                    <select
-                      value={formData.toda}
-                      onChange={(e) => setFormData(prev => ({ ...prev, toda: e.target.value }))}
-                      className="border border-slate-200 rounded-lg px-3.5 py-2 text-sm font-semibold bg-white outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer"
-                    >
-                      <option value="Baguio TODA">Baguio TODA</option>
-                      <option value="CHOT-TODA">CHOT-TODA</option>
-                      <option value="LHITC-TODA">LHITC-TODA</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-xs text-slate-500 font-bold uppercase tracking-wider">Initial Status</label>
-                  <div className="flex gap-4">
-                    <label className="flex items-center gap-2 text-sm font-bold text-slate-600 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="status"
-                        checked={formData.status === "Active"}
-                        onChange={() => setFormData(prev => ({ ...prev, status: "Active" }))}
-                        className="w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500"
-                      />
-                      Active
-                    </label>
-                    <label className="flex items-center gap-2 text-sm font-bold text-slate-600 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="status"
-                        checked={formData.status === "Inactive"}
-                        onChange={() => setFormData(prev => ({ ...prev, status: "Inactive" }))}
-                        className="w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500"
-                      />
-                      Inactive
-                    </label>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-end gap-3 mt-4 border-t border-slate-100 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("dashboard")}
-                    className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-500 rounded-lg font-bold text-sm transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-lg font-bold text-sm shadow-md transition-all hover:scale-[1.01]"
-                  >
-                    Register Driver
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
 
           {/* Active Tab: Ride Requests */}
           {activeTab === "ride-requests" && (
@@ -1382,14 +1427,14 @@ export default function Home() {
                         .slice((requestsPage - 1) * 9, requestsPage * 9)
                         .map((r) => (
                           <tr key={r.id} className="hover:bg-slate-50/50 transition-colors">
-                            <td className="py-4.5 pl-3 text-[#091b6f] font-bold">{r.passenger}</td>
-                            <td className="py-4.5 text-slate-600">{r.location}</td>
-                            <td className="py-4.5 text-slate-500">{r.destination}</td>
-                            <td className="py-4.5 text-slate-700">{r.driver}</td>
-                            <td className="py-4.5 text-slate-600">{r.toda}</td>
-                            <td className="py-4.5">
+                            <td className="py-4 pl-3 text-[#091b6f] font-bold">{r.passenger}</td>
+                            <td className="py-4 text-slate-600">{r.location}</td>
+                            <td className="py-4 text-slate-500">{r.destination}</td>
+                            <td className="py-4 text-slate-700">{r.driver}</td>
+                            <td className="py-4 text-slate-600">{r.toda}</td>
+                            <td className="py-4">
                               <span className={`inline-block px-3 py-0.5 rounded-full text-[10px] font-bold ${r.status === "Completed" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" :
-                                r.status === "In Transit" || r.status === "Ongoing" ? "bg-emerald-500 text-white border border-emerald-600" :
+                                r.status === "In Transit" ? "bg-emerald-500 text-white border border-emerald-600" :
                                   r.status === "Pending" ? "bg-amber-100 text-amber-600 border border-amber-200" :
                                     r.status === "Scheduled" ? "bg-indigo-50 text-indigo-600 border border-indigo-100" :
                                       "bg-rose-50 text-rose-600 border border-rose-100"
@@ -1397,7 +1442,7 @@ export default function Home() {
                                 {r.status}
                               </span>
                             </td>
-                            <td className="py-4.5 text-center pr-3">
+                            <td className="py-4 text-center pr-3">
                               <button
                                 onClick={() => {
                                   setViewingRequest(r);
@@ -1488,21 +1533,30 @@ export default function Home() {
               {/* Stat Cards Row (Matches Image 3) */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {/* Total Earnings */}
-                <div className="bg-[#091b6f] text-white p-6 rounded-2xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div
+                  onClick={() => setActiveStatModal("total-earnings")}
+                  className="bg-[#091b6f] text-white p-6 rounded-2xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
+                >
                   <p className="text-sky-200 font-bold text-xs uppercase tracking-wider">Total Earnings</p>
                   <p className="text-4xl font-extrabold mt-2 font-sans">₱ 50,000</p>
                   <span className="text-[10px] text-sky-200/60 font-semibold mt-4">Active Volume baseline</span>
                 </div>
 
                 {/* Total Completed Rides */}
-                <div className="bg-[#091b6f] text-white p-6 rounded-2xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div
+                  onClick={() => setActiveStatModal("completed-rides")}
+                  className="bg-[#091b6f] text-white p-6 rounded-2xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
+                >
                   <p className="text-sky-200 font-bold text-xs uppercase tracking-wider">Total Completed Rides</p>
                   <p className="text-4xl font-extrabold mt-2 font-sans">1,250</p>
                   <span className="text-[10px] text-sky-200/60 font-semibold mt-4">Total platform transactions</span>
                 </div>
 
                 {/* Total Commission Earned */}
-                <div className="bg-[#091b6f] text-white p-6 rounded-2xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div
+                  onClick={() => setActiveStatModal("commission-earned")}
+                  className="bg-[#091b6f] text-white p-6 rounded-2xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
+                >
                   <p className="text-sky-200 font-bold text-xs uppercase tracking-wider">Total Commission Earned</p>
                   <p className="text-4xl font-extrabold mt-2 font-sans">₱ 10,000</p>
                   <span className="text-[10px] text-sky-200/60 font-semibold mt-4">15% TODA commission margin</span>
@@ -1604,11 +1658,11 @@ export default function Home() {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                        <th className="pb-3 pl-3">Date</th>
-                        <th className="pb-3">TODA</th>
-                        <th className="pb-3">Completed Rides</th>
-                        <th className="pb-3">Total Earnings</th>
-                        <th className="pb-3">Commission Earned</th>
+                        <th className="pb-3 pl-3 text-left">Date</th>
+                        <th className="pb-3 px-3 text-left">TODA</th>
+                        <th className="pb-3 px-3 text-left">Completed Rides</th>
+                        <th className="pb-3 px-3 text-left">Total Earnings</th>
+                        <th className="pb-3 px-3 text-left">Commission Earned</th>
                         <th className="pb-3 text-center pr-3">Actions</th>
                       </tr>
                     </thead>
@@ -1617,12 +1671,12 @@ export default function Home() {
                         .slice((earningsPage - 1) * 9, earningsPage * 9)
                         .map((r) => (
                           <tr key={r.id} className="hover:bg-slate-50/50 transition-colors">
-                            <td className="py-4 pl-3 text-[#091b6f] font-semibold">{r.date}</td>
-                            <td className="py-4 text-slate-600">{r.toda}</td>
-                            <td className="py-4 text-slate-700">{r.completedRides}</td>
-                            <td className="py-4 text-slate-800 font-bold">₱{r.totalEarnings.toLocaleString()}</td>
-                            <td className="py-4 text-[#091b6f] font-extrabold">₱{r.commissionEarned.toLocaleString()}</td>
-                            <td className="py-4 text-center pr-3">
+                            <td className="py-4.5 pl-3 text-left text-[#091b6f] font-semibold">{r.date}</td>
+                            <td className="py-4.5 px-3 text-left text-slate-600 max-w-[180px] truncate" title={r.toda}>{r.toda}</td>
+                            <td className="py-4.5 px-3 text-left text-slate-700">{r.completedRides}</td>
+                            <td className="py-4.5 px-3 text-left text-slate-800 font-bold">₱{r.totalEarnings.toLocaleString()}</td>
+                            <td className="py-4.5 px-3 text-left text-[#091b6f] font-extrabold">₱{r.commissionEarned.toLocaleString()}</td>
+                            <td className="py-4.5 text-center pr-3">
                               <button
                                 onClick={() => {
                                   setViewingEarningsRecord(r);
@@ -1713,7 +1767,10 @@ export default function Home() {
               {/* Users Stats Cards Row (Matches Image 4) */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {/* Active Passengers Card */}
-                <div className="bg-[#091b6f] text-white p-5 rounded-2xl shadow-sm border border-blue-900/10 flex items-center justify-between hover:shadow-md transition-shadow">
+                <div
+                  onClick={() => setActiveStatModal("active-passengers")}
+                  className="bg-[#091b6f] text-white p-5 rounded-2xl shadow-sm border border-blue-900/10 flex items-center justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
+                >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-sky-200">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /></svg>
@@ -1726,7 +1783,10 @@ export default function Home() {
                 </div>
 
                 {/* Active Drivers Card */}
-                <div className="bg-[#091b6f] text-white p-5 rounded-2xl shadow-sm border border-blue-900/10 flex items-center justify-between hover:shadow-md transition-shadow">
+                <div
+                  onClick={() => setActiveStatModal("active-drivers")}
+                  className="bg-[#091b6f] text-white p-5 rounded-2xl shadow-sm border border-blue-900/10 flex items-center justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
+                >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-sky-200">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
@@ -1739,7 +1799,10 @@ export default function Home() {
                 </div>
 
                 {/* Registered Passengers Card */}
-                <div className="bg-[#091b6f] text-white p-5 rounded-2xl shadow-sm border border-blue-900/10 flex items-center justify-between hover:shadow-md transition-shadow">
+                <div
+                  onClick={() => setActiveStatModal("registered-passengers")}
+                  className="bg-[#091b6f] text-white p-5 rounded-2xl shadow-sm border border-blue-900/10 flex items-center justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
+                >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-sky-200">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M20 8v6M23 11h-6" /></svg>
@@ -1879,19 +1942,19 @@ export default function Home() {
                           .slice((driversPage - 1) * itemsPerPage, driversPage * itemsPerPage)
                           .map((d) => (
                             <tr key={d.id} className="hover:bg-slate-50/50 transition-colors">
-                              <td className="py-4.5 pl-3">
+                              <td className="py-4 pl-3">
                                 <p className="text-[#091b6f] font-bold">{d.name}</p>
                                 <p className="text-[10px] text-slate-400 font-bold">Body: {d.bodyNumber}</p>
                               </td>
-                              <td className="py-4.5 text-slate-600">{d.toda}</td>
-                              <td className="py-4.5 text-slate-500 font-mono text-xs">{d.license}</td>
-                              <td className="py-4.5">
+                              <td className="py-4 text-slate-600">{d.toda}</td>
+                              <td className="py-4 text-slate-500 font-mono text-xs">{d.license}</td>
+                              <td className="py-4">
                                 <span className={`inline-block px-3 py-0.5 rounded-full text-[10px] font-bold ${d.status === "Active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-rose-50 text-rose-600 border border-rose-100"
                                   }`}>
                                   {d.status}
                                 </span>
                               </td>
-                              <td className="py-4.5 text-center pr-3">
+                              <td className="py-4 text-center pr-3">
                                 <button
                                   onClick={() => {
                                     setViewingUser(d);
@@ -1979,18 +2042,18 @@ export default function Home() {
                           .slice((passengersPage - 1) * itemsPerPage, passengersPage * itemsPerPage)
                           .map((p) => (
                             <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
-                              <td className="py-4.5 pl-3">
+                              <td className="py-4 pl-3">
                                 <p className="text-[#091b6f] font-bold">{p.name}</p>
                                 <p className="text-[10px] text-slate-400 font-bold">Canceled: {p.canceledTrips} trips</p>
                               </td>
-                              <td className="py-4.5 text-slate-600">{p.contact}</td>
-                              <td className="py-4.5">
+                              <td className="py-4 text-slate-600">{p.contact}</td>
+                              <td className="py-4">
                                 <span className={`inline-block px-3 py-0.5 rounded-full text-[10px] font-bold ${p.status === "Active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-rose-50 text-rose-600 border border-rose-100"
                                   }`}>
                                   {p.status}
                                 </span>
                               </td>
-                              <td className="py-4.5 text-center pr-3">
+                              <td className="py-4 text-center pr-3">
                                 <button
                                   onClick={() => {
                                     setViewingUser(p);
@@ -2653,7 +2716,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Contact Phone</p>
-                    <p className="font-bold text-slate-700 mt-0.5">{viewingUser.phone}</p>
+                    <p className="font-bold text-slate-700 mt-0.5">{(viewingUser as Driver).phone}</p>
                   </div>
                   <div>
                     <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Joined Date</p>
@@ -2779,7 +2842,7 @@ export default function Home() {
           <div className="w-full max-w-lg flex flex-col items-center gap-4">
 
             {/* Header Title */}
-            <h2 className="text-[#091b6f] font-serif text-3xl font-bold italic tracking-wide text-center">
+            <h2 className="text-[#091b6f] text-3xl font-extrabold tracking-wide text-center">
               Profile (Admin)
             </h2>
 
@@ -2799,7 +2862,7 @@ export default function Home() {
               <div className="relative flex flex-col items-center gap-2">
                 <div className="w-24 h-24 rounded-full border-4 border-sky-300 shadow-inner overflow-hidden bg-sky-200">
                   <svg viewBox="0 0 40 40" className="w-full h-full">
-                    <circle cx="20" cy="20" r="18" fill="#38bdf8" />
+                    <circle cx="20" cy="20" r="18" fill={adminProfile.avatarColor || "#38bdf8"} />
                     <g>
                       <path d="M9 16C9 10 14 8 20 8C26 8 31 10 31 16C31 22 28 24 28 27C28 30 20 31 20 31C20 31 12 30 12 27C12 24 9 22 9 16Z" fill="#1e1b4b" />
                       <circle cx="20" cy="19" r="7" fill="#fed7aa" />
@@ -2811,7 +2874,7 @@ export default function Home() {
                 </div>
 
                 {/* Admin Name & Badge */}
-                <h3 className="text-xl font-bold text-[#091b6f] font-serif">{adminProfile.name}</h3>
+                <h3 className="text-xl font-bold text-[#091b6f]">{adminProfile.name}</h3>
                 <span className="px-4 py-0.5 bg-blue-100 text-blue-700 font-extrabold text-[10px] rounded-full uppercase tracking-wider border border-blue-200/50">
                   Administrator
                 </span>
@@ -2841,12 +2904,17 @@ export default function Home() {
                 <div className="py-4 flex items-center justify-between gap-4">
                   <div className="flex flex-col gap-1">
                     <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">Password</span>
-                    <span className="text-sm font-bold text-slate-600">{adminProfile.password}</span>
+                    <span className="text-sm font-bold text-slate-600">
+                      {"•".repeat(adminProfile.password.length)}
+                    </span>
                   </div>
                   <button
                     onClick={() => {
-                      const newPw = prompt("Enter new password:", "•••••••••");
-                      if (newPw) setAdminProfile(prev => ({ ...prev, password: newPw }));
+                      setCurrentProfilePasswordInput("");
+                      setNewProfilePasswordInput("");
+                      setConfirmProfilePasswordInput("");
+                      setProfileActionError("");
+                      setShowChangePasswordSubModal(true);
                     }}
                     className="px-5 py-1.5 border border-[#091b6f] hover:bg-sky-50 text-[#091b6f] text-xs font-bold rounded-full transition-colors cursor-pointer"
                   >
@@ -2862,8 +2930,9 @@ export default function Home() {
                   </div>
                   <button
                     onClick={() => {
-                      const newName = prompt("Edit Administrator Name:", adminProfile.name);
-                      if (newName) setAdminProfile(prev => ({ ...prev, name: newName }));
+                      setNewProfileNameInput(adminProfile.name);
+                      setProfileActionError("");
+                      setShowEditNameSubModal(true);
                     }}
                     className="px-5 py-1.5 border border-[#091b6f] hover:bg-sky-50 text-[#091b6f] text-xs font-bold rounded-full transition-colors cursor-pointer"
                   >
@@ -2878,7 +2947,9 @@ export default function Home() {
                     <span className="text-xs text-slate-400 font-semibold">Update your profile picture</span>
                   </div>
                   <button
-                    onClick={() => alert("Change profile photo simulation triggered.")}
+                    onClick={() => {
+                      setShowChangePictureSubModal(true);
+                    }}
                     className="px-5 py-1.5 border border-[#091b6f] hover:bg-sky-50 text-[#091b6f] text-xs font-bold rounded-full transition-colors cursor-pointer"
                   >
                     Change Picture
@@ -2891,8 +2962,11 @@ export default function Home() {
               <button
                 onClick={() => {
                   if (confirm("Are you sure you want to log out?")) {
+                    setIsLoggedIn(false);
                     setActiveTab("dashboard");
-                    alert("Simulated logout successful! Resetting dashboard view.");
+                    setLoginEmail("");
+                    setLoginPassword("");
+                    setLoginError("");
                   }
                 }}
                 className="w-full bg-[#ef2b2b] hover:bg-red-600 text-white font-bold py-3 px-6 rounded-2xl shadow-md hover:shadow-lg transition-all cursor-pointer text-center text-sm uppercase tracking-wider"
@@ -2902,6 +2976,186 @@ export default function Home() {
 
             </div>
           </div>
+
+          {/* CHANGE PASSWORD SUB-MODAL */}
+          {showChangePasswordSubModal && (
+            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all animate-in fade-in duration-200">
+              <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-100 p-6 flex flex-col gap-4">
+                <h3 className="text-[#091b6f] font-bold text-lg">Change Admin Password</h3>
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs text-slate-500 font-bold uppercase tracking-wider">Current Password</label>
+                    <input
+                      type="password"
+                      placeholder="Enter current password"
+                      value={currentProfilePasswordInput}
+                      onChange={(e) => setCurrentProfilePasswordInput(e.target.value)}
+                      className="border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold outline-hidden focus:border-blue-500 text-[#091b6f]"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs text-slate-500 font-bold uppercase tracking-wider">New Password</label>
+                    <input
+                      type="password"
+                      placeholder="Enter new password"
+                      value={newProfilePasswordInput}
+                      onChange={(e) => setNewProfilePasswordInput(e.target.value)}
+                      className="border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold outline-hidden focus:border-blue-500 text-[#091b6f]"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs text-slate-500 font-bold uppercase tracking-wider">Confirm New Password</label>
+                    <input
+                      type="password"
+                      placeholder="Confirm new password"
+                      value={confirmProfilePasswordInput}
+                      onChange={(e) => setConfirmProfilePasswordInput(e.target.value)}
+                      className="border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold outline-hidden focus:border-blue-500 text-[#091b6f]"
+                    />
+                  </div>
+                  {profileActionError && (
+                    <p className="text-rose-500 text-xs font-bold text-center">{profileActionError}</p>
+                  )}
+                </div>
+                <div className="flex items-center justify-end gap-2 mt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowChangePasswordSubModal(false)}
+                    className="px-4 py-2 border border-slate-250 hover:bg-slate-50 text-slate-500 rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (currentProfilePasswordInput !== adminProfile.password) {
+                        setProfileActionError("Current password is incorrect.");
+                        return;
+                      }
+                      if (!newProfilePasswordInput) {
+                        setProfileActionError("New password cannot be empty.");
+                        return;
+                      }
+                      if (newProfilePasswordInput !== confirmProfilePasswordInput) {
+                        setProfileActionError("Passwords do not match.");
+                        return;
+                      }
+                      setAdminProfile(prev => ({ ...prev, password: newProfilePasswordInput }));
+                      setShowChangePasswordSubModal(false);
+                      alert("Password updated successfully!");
+                    }}
+                    className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                  >
+                    Save Password
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* EDIT NAME SUB-MODAL */}
+          {showEditNameSubModal && (
+            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all animate-in fade-in duration-200">
+              <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-100 p-6 flex flex-col gap-4">
+                <h3 className="text-[#091b6f] font-bold text-lg">Edit Administrator Name</h3>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-slate-500 font-bold uppercase tracking-wider">New Name</label>
+                  <input
+                    type="text"
+                    placeholder="Enter display name"
+                    value={newProfileNameInput}
+                    onChange={(e) => setNewProfileNameInput(e.target.value)}
+                    className="border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold outline-hidden focus:border-blue-500 text-[#091b6f]"
+                  />
+                  {profileActionError && (
+                    <p className="text-rose-500 text-xs font-bold text-center mt-2">{profileActionError}</p>
+                  )}
+                </div>
+                <div className="flex items-center justify-end gap-2 mt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowEditNameSubModal(false)}
+                    className="px-4 py-2 border border-slate-250 hover:bg-slate-50 text-slate-500 rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!newProfileNameInput.trim()) {
+                        setProfileActionError("Name cannot be empty.");
+                        return;
+                      }
+                      setAdminProfile(prev => ({ ...prev, name: newProfileNameInput }));
+                      setShowEditNameSubModal(false);
+                      alert("Administrator name updated!");
+                    }}
+                    className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                  >
+                    Save Name
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* CHANGE PICTURE SUB-MODAL */}
+          {showChangePictureSubModal && (
+            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all animate-in fade-in duration-200">
+              <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-100 p-6 flex flex-col gap-4">
+                <h3 className="text-[#091b6f] font-bold text-lg">Change Profile Color Theme</h3>
+                <p className="text-xs text-slate-400 font-semibold mb-2">Select an accent background color for your administrator profile avatar.</p>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { name: "Sky Blue", color: "#38bdf8" },
+                    { name: "Coral Orange", color: "#f97316" },
+                    { name: "Emerald Green", color: "#10b981" },
+                    { name: "Indigo Purple", color: "#8b5cf6" }
+                  ].map((theme) => (
+                    <button
+                      key={theme.color}
+                      type="button"
+                      onClick={() => {
+                        setAdminProfile(prev => ({ ...prev, avatarColor: theme.color }));
+                        setShowChangePictureSubModal(false);
+                        alert(`Profile accent updated to ${theme.name}!`);
+                      }}
+                      className={`border rounded-2xl p-4 flex flex-col items-center gap-3 transition-all hover:scale-[1.03] cursor-pointer ${adminProfile.avatarColor === theme.color
+                        ? "border-blue-500 bg-blue-50/50"
+                        : "border-slate-200 hover:border-blue-300 hover:bg-slate-50/50"
+                        }`}
+                    >
+                      <div
+                        className="w-12 h-12 rounded-full border-2 border-white shadow-inner flex items-center justify-center"
+                        style={{ backgroundColor: theme.color }}
+                      >
+                        <svg width="22" height="22" viewBox="0 0 40 40" className="rounded-full">
+                          <g>
+                            <path d="M9 16C9 10 14 8 20 8C26 8 31 10 31 16C31 22 28 24 28 27C28 30 20 31 20 31C20 31 12 30 12 27C12 24 9 22 9 16Z" fill="#1e1b4b" />
+                            <circle cx="20" cy="19" r="7" fill="#fed7aa" />
+                            <path d="M14 15C16 13 18 13 20 14C22 13 24 13 26 15C26 15 24 11 20 11C16 11 14 15 14 15Z" fill="#1e1b4b" />
+                            <path d="M10 36C10 31 14 29 20 29C26 29 30 31 30 36H10Z" fill="#4f46e5" />
+                            <path d="M20 29V32" stroke="#fed7aa" strokeWidth="2" strokeLinecap="round" />
+                          </g>
+                        </svg>
+                      </div>
+                      <span className="text-xs font-bold text-slate-700">{theme.name}</span>
+                    </button>
+                  ))}
+                </div>
+                <div className="flex justify-end mt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowChangePictureSubModal(false)}
+                    className="px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                  >
+                    Close Selection
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       )}
 
@@ -2976,6 +3230,372 @@ export default function Home() {
                   Close Report
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* STAT BREAKDOWN MODAL */}
+      {activeStatModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-all animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-100 flex flex-col max-h-[90vh]">
+            {/* Header */}
+            <div className="bg-[#0b1b6e] text-white px-6 py-5 flex items-center justify-between shrink-0">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-sky-200">System Information Audit</span>
+                <h3 className="font-bold text-lg">
+                  {activeStatModal === "total-drivers" && "Total Registered Drivers"}
+                  {activeStatModal === "active-drivers" && "Active Platform Drivers"}
+                  {activeStatModal === "users" && "User Base Breakdown"}
+                  {activeStatModal === "trips-today" && "Trips Today Audit"}
+                  {activeStatModal === "total-earnings" && "Total Platform Earnings"}
+                  {activeStatModal === "completed-rides" && "Total Completed Rides"}
+                  {activeStatModal === "commission-earned" && "Total TODA Commission Earned"}
+                  {activeStatModal === "active-passengers" && "Active Platform Passengers"}
+                  {activeStatModal === "registered-passengers" && "Registered Passengers List"}
+                </h3>
+              </div>
+              <button
+                onClick={() => setActiveStatModal(null)}
+                className="text-white/85 hover:text-white transition-colors cursor-pointer"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Scrollable Contents */}
+            <div className="p-6 overflow-y-auto flex-1 flex flex-col gap-4">
+              {/* CONTENT FOR: total-drivers */}
+              {activeStatModal === "total-drivers" && (
+                <div className="flex flex-col gap-3">
+                  <p className="text-sm text-slate-500 font-semibold">Currently registered drivers in Tayabas TodaGo Portal. Total: {drivers.length}</p>
+                  <div className="overflow-x-auto border border-slate-100 rounded-xl">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="border-b border-slate-150 bg-slate-50 text-slate-500 font-bold uppercase tracking-wider">
+                          <th className="p-3">Name</th>
+                          <th className="p-3">TODA</th>
+                          <th className="p-3">Plate / Body</th>
+                          <th className="p-3">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
+                        {drivers.map(d => (
+                          <tr key={d.id} className="hover:bg-slate-50/50">
+                            <td className="p-3">
+                              <p className="font-bold text-[#091b6f]">{d.name}</p>
+                              <p className="text-[10px] text-slate-400 font-normal">{d.phone}</p>
+                            </td>
+                            <td className="p-3">{d.toda}</td>
+                            <td className="p-3">
+                              <p>{d.plateNumber}</p>
+                              <p className="text-[10px] text-slate-400 font-normal">{d.bodyNumber}</p>
+                            </td>
+                            <td className="p-3">
+                              <span className={`inline-block px-2 py-0.5 rounded-full text-[9px] font-bold ${d.status === "Active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-rose-50 text-rose-600 border border-rose-100"}`}>
+                                {d.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* CONTENT FOR: active-drivers */}
+              {activeStatModal === "active-drivers" && (
+                <div className="flex flex-col gap-3">
+                  <p className="text-sm text-slate-500 font-semibold">Currently active drivers. Total: {drivers.filter(d => d.status === "Active").length}</p>
+                  <div className="overflow-x-auto border border-slate-100 rounded-xl">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="border-b border-slate-150 bg-slate-50 text-slate-500 font-bold uppercase tracking-wider">
+                          <th className="p-3">Name</th>
+                          <th className="p-3">TODA</th>
+                          <th className="p-3">Plate / Body</th>
+                          <th className="p-3">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
+                        {drivers.filter(d => d.status === "Active").map(d => (
+                          <tr key={d.id} className="hover:bg-slate-50/50">
+                            <td className="p-3">
+                              <p className="font-bold text-[#091b6f]">{d.name}</p>
+                              <p className="text-[10px] text-slate-400 font-normal">{d.phone}</p>
+                            </td>
+                            <td className="p-3">{d.toda}</td>
+                            <td className="p-3">
+                              <p>{d.plateNumber}</p>
+                              <p className="text-[10px] text-slate-400 font-normal">{d.bodyNumber}</p>
+                            </td>
+                            <td className="p-3">
+                              <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
+                                {d.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* CONTENT FOR: users */}
+              {activeStatModal === "users" && (
+                <div className="flex flex-col gap-4">
+                  <div className="grid grid-cols-2 gap-4 shrink-0">
+                    <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 text-center">
+                      <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Drivers</p>
+                      <p className="text-2xl font-extrabold text-[#091b6f]">{drivers.length}</p>
+                    </div>
+                    <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 text-center">
+                      <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Passengers</p>
+                      <p className="text-2xl font-extrabold text-indigo-600">{passengers.length}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-slate-500 font-bold uppercase mt-2">Passenger Client Registry</p>
+                  <div className="overflow-x-auto border border-slate-100 rounded-xl">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="border-b border-slate-150 bg-slate-50 text-slate-500 font-bold uppercase tracking-wider">
+                          <th className="p-3">Name</th>
+                          <th className="p-3">Contact</th>
+                          <th className="p-3">Rides Taken</th>
+                          <th className="p-3">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
+                        {passengers.map(p => (
+                          <tr key={p.id} className="hover:bg-slate-50/50">
+                            <td className="p-3 font-bold text-[#091b6f]">{p.name}</td>
+                            <td className="p-3">{p.contact}</td>
+                            <td className="p-3">{p.ridesTaken} Rides</td>
+                            <td className="p-3">
+                              <span className={`inline-block px-2 py-0.5 rounded-full text-[9px] font-bold ${p.status === "Active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-rose-50 text-rose-600 border border-rose-100"}`}>
+                                {p.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* CONTENT FOR: trips-today */}
+              {activeStatModal === "trips-today" && (
+                <div className="flex flex-col gap-3">
+                  <p className="text-sm text-slate-500 font-semibold">Today's Ride Requests and Dispatches. Total: {rideRequests.length}</p>
+                  <div className="overflow-x-auto border border-slate-100 rounded-xl">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="border-b border-slate-150 bg-slate-50 text-slate-500 font-bold uppercase tracking-wider">
+                          <th className="p-3">Passenger</th>
+                          <th className="p-3">Pickup / Destination</th>
+                          <th className="p-3">Driver / TODA</th>
+                          <th className="p-3">Fare</th>
+                          <th className="p-3 text-right">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
+                        {rideRequests.map(r => (
+                          <tr key={r.id} className="hover:bg-slate-50/50">
+                            <td className="p-3 font-bold text-[#091b6f]">{r.passenger}</td>
+                            <td className="p-3">
+                              <p className="font-bold text-slate-700">{r.location}</p>
+                              <p className="text-[10px] text-slate-400 font-normal">→ {r.destination}</p>
+                            </td>
+                            <td className="p-3">
+                              <p className="font-bold text-slate-600">{r.driver}</p>
+                              <p className="text-[10px] text-slate-400 font-normal">{r.toda}</p>
+                            </td>
+                            <td className="p-3 font-bold text-[#091b6f]">₱{r.fare}</td>
+                            <td className="p-3 text-right">
+                              <span className={`inline-block px-2 py-0.5 rounded-full text-[9px] font-bold ${r.status === "Completed" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" :
+                                r.status === "In Transit" ? "bg-blue-50 text-blue-600 border border-blue-100" :
+                                  r.status === "Pending" ? "bg-amber-50 text-amber-600 border border-amber-100" :
+                                    "bg-rose-50 text-rose-600 border border-rose-100"
+                                }`}>
+                                {r.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* CONTENT FOR: total-earnings */}
+              {activeStatModal === "total-earnings" && (
+                <div className="flex flex-col gap-4">
+                  <div className="bg-[#091b6f] text-white p-5 rounded-2xl text-center">
+                    <p className="text-xs text-sky-200 font-bold uppercase tracking-wider">Total Earnings (Baseline + Active Volume)</p>
+                    <p className="text-4xl font-extrabold mt-1">₱ {earningsToday.toLocaleString()}</p>
+                  </div>
+                  <h4 className="text-xs font-bold uppercase text-slate-400 tracking-wider">TODA Earnings breakdown</h4>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col gap-3 font-semibold text-slate-600 text-sm">
+                    <div className="flex justify-between">
+                      <span>LHITC-TODA (45%)</span>
+                      <span className="font-bold text-slate-800">₱ {((earningsToday) * 0.45).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                    </div>
+                    <div className="flex justify-between border-t border-slate-200/50 pt-2">
+                      <span>CHOT-TODA (30%)</span>
+                      <span className="font-bold text-slate-800">₱ {((earningsToday) * 0.30).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                    </div>
+                    <div className="flex justify-between border-t border-slate-200/50 pt-2">
+                      <span>BYPASS ILAYANG BAGUIO-TODA (25%)</span>
+                      <span className="font-bold text-slate-800">₱ {((earningsToday) * 0.25).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                    </div>
+                    <div className="flex justify-between border-t border-slate-200/50 pt-2 font-bold text-[#091b6f]">
+                      <span>Total transacted volume</span>
+                      <span>₱ {earningsToday.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* CONTENT FOR: completed-rides */}
+              {activeStatModal === "completed-rides" && (
+                <div className="flex flex-col gap-4">
+                  <div className="bg-[#091b6f] text-white p-5 rounded-2xl text-center">
+                    <p className="text-xs text-sky-200 font-bold uppercase tracking-wider">Total Completed Rides</p>
+                    <p className="text-4xl font-extrabold mt-1">1,250</p>
+                  </div>
+                  <h4 className="text-xs font-bold uppercase text-slate-400 tracking-wider">completed transactions by association</h4>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col gap-3 font-semibold text-slate-600 text-sm">
+                    <div className="flex justify-between">
+                      <span>LHITC-TODA</span>
+                      <span className="font-bold text-slate-800">562 completed rides</span>
+                    </div>
+                    <div className="flex justify-between border-t border-slate-200/50 pt-2">
+                      <span>CHOT-TODA</span>
+                      <span className="font-bold text-slate-800">375 completed rides</span>
+                    </div>
+                    <div className="flex justify-between border-t border-slate-200/50 pt-2">
+                      <span>BYPASS ILAYANG BAGUIO-TODA</span>
+                      <span className="font-bold text-slate-800">313 completed rides</span>
+                    </div>
+                    <div className="flex justify-between border-t border-slate-200/50 pt-2 font-bold text-[#091b6f]">
+                      <span>Total platform rides</span>
+                      <span>1,250 Completed Rides</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* CONTENT FOR: commission-earned */}
+              {activeStatModal === "commission-earned" && (
+                <div className="flex flex-col gap-4">
+                  <div className="bg-[#091b6f] text-white p-5 rounded-2xl text-center">
+                    <p className="text-xs text-sky-200 font-bold uppercase tracking-wider">Total Platform Commission (15%)</p>
+                    <p className="text-4xl font-extrabold mt-1">₱ 10,000</p>
+                  </div>
+                  <h4 className="text-xs font-bold uppercase text-slate-400 tracking-wider">commission breakdown by association</h4>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col gap-3 font-semibold text-slate-600 text-sm">
+                    <div className="flex justify-between">
+                      <span>LHITC-TODA Commission Share</span>
+                      <span className="font-bold text-slate-800">₱ 4,500</span>
+                    </div>
+                    <div className="flex justify-between border-t border-slate-200/50 pt-2">
+                      <span>CHOT-TODA Commission Share</span>
+                      <span className="font-bold text-slate-800">₱ 3,000</span>
+                    </div>
+                    <div className="flex justify-between border-t border-slate-200/50 pt-2">
+                      <span>BYPASS ILAYANG BAGUIO-TODA Commission Share</span>
+                      <span className="font-bold text-slate-800">₱ 2,500</span>
+                    </div>
+                    <div className="flex justify-between border-t border-slate-200/50 pt-2 font-bold text-[#091b6f]">
+                      <span>Total Platform Earnings Share</span>
+                      <span>₱ 10,000</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* CONTENT FOR: active-passengers */}
+              {activeStatModal === "active-passengers" && (
+                <div className="flex flex-col gap-3">
+                  <p className="text-sm text-slate-500 font-semibold">Active passengers list. Total active: {passengers.filter(p => p.status === "Active").length}</p>
+                  <div className="overflow-x-auto border border-slate-100 rounded-xl">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="border-b border-slate-150 bg-slate-50 text-slate-500 font-bold uppercase tracking-wider">
+                          <th className="p-3">Passenger</th>
+                          <th className="p-3">Contact</th>
+                          <th className="p-3">Rides Taken</th>
+                          <th className="p-3">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
+                        {passengers.filter(p => p.status === "Active").map(p => (
+                          <tr key={p.id} className="hover:bg-slate-50/50">
+                            <td className="p-3 font-bold text-[#091b6f]">{p.name}</td>
+                            <td className="p-3">{p.contact}</td>
+                            <td className="p-3">{p.ridesTaken} Rides</td>
+                            <td className="p-3">
+                              <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
+                                {p.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* CONTENT FOR: registered-passengers */}
+              {activeStatModal === "registered-passengers" && (
+                <div className="flex flex-col gap-3">
+                  <p className="text-sm text-slate-500 font-semibold">All registered passenger accounts. Total: {passengers.length}</p>
+                  <div className="overflow-x-auto border border-slate-100 rounded-xl">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="border-b border-slate-150 bg-slate-50 text-slate-500 font-bold uppercase tracking-wider">
+                          <th className="p-3">Passenger</th>
+                          <th className="p-3">Contact</th>
+                          <th className="p-3">Rides Taken</th>
+                          <th className="p-3">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
+                        {passengers.map(p => (
+                          <tr key={p.id} className="hover:bg-slate-50/50">
+                            <td className="p-3 font-bold text-[#091b6f]">{p.name}</td>
+                            <td className="p-3">{p.contact}</td>
+                            <td className="p-3">{p.ridesTaken} Rides</td>
+                            <td className="p-3">
+                              <span className={`inline-block px-2 py-0.5 rounded-full text-[9px] font-bold ${p.status === "Active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-rose-50 text-rose-600 border border-rose-100"}`}>
+                                {p.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-slate-100 p-4 shrink-0 flex justify-end bg-slate-50">
+              <button
+                onClick={() => setActiveStatModal(null)}
+                className="px-5 py-2 bg-[#091b6f] hover:bg-blue-800 text-white rounded-xl font-bold text-xs transition-colors cursor-pointer shadow-sm hover:shadow"
+              >
+                Close Audit Detail
+              </button>
             </div>
           </div>
         </div>
