@@ -3,7 +3,7 @@
 
 :root {
   --background: #f3f8fc;
-  --foreground: #0f172a;
+  --foreground: #091b6f;
   --font-poppins: 'Poppins', ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -11,6 +11,10 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --color-slate-900: #04094a;
+  --color-slate-800: #091b6f;
+  --color-slate-700: #0b2399;
+  --color-slate-600: #1b39b0;
 }
 
 body {
@@ -40,7 +44,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px #040a5a inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #040a5a inset !important;
   -webkit-text-fill-color: white !important;
   transition: background-color 5000s ease-in-out 0s;
   font-family: 'Poppins', sans-serif !important;
