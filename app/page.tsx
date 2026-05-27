@@ -547,53 +547,24 @@ export default function Home() {
   }, [earningsRecords, earningsTodaFilter, earningsDriverFilter]);
   if (!isLoggedIn) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#bde5ff] p-4 text-center select-none font-sans">
-        <div className="flex flex-col items-center w-full max-w-sm">
-          {/* Tricycle Logo */}
-          <svg width="120" height="90" viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#091b6f] mb-2">
-            {/* Sidecar Roof visor */}
-            <path d="M36 32h32v3H36z" fill="currentColor" />
-            <path d="M68 32c5 0 24-2 24-2v3s-19 2-24 2z" fill="currentColor" />
-
-            {/* Sidecar Main Body */}
-            <rect x="34" y="36" width="34" height="20" rx="4" fill="currentColor" />
-            {/* Sidecar Window (cutout matching login bg #bde5ff) */}
-            <rect x="40" y="40" width="22" height="11" rx="2" fill="#bde5ff" />
-
-            {/* Sidecar Bottom Stripes */}
-            <rect x="34" y="58" width="34" height="2" fill="currentColor" />
-            <rect x="34" y="62" width="34" height="2" fill="currentColor" />
-            <rect x="34" y="66" width="34" height="4" rx="1" fill="currentColor" />
-
-            {/* Sidecar Wheel */}
-            <rect x="28" y="52" width="6" height="18" rx="3" fill="currentColor" />
-
-            {/* Connecting bar to motorcycle */}
-            <rect x="68" y="56" width="10" height="2" fill="currentColor" />
-            <rect x="68" y="64" width="10" height="2" fill="currentColor" />
-
-            {/* Motorcycle Body/Shield */}
-            <rect x="76" y="48" width="12" height="18" rx="3" fill="currentColor" />
-            <rect x="72" y="49" width="20" height="2.5" fill="currentColor" /> {/* Handlebars */}
-            <circle cx="82" cy="46" r="2" fill="#bde5ff" /> {/* Headlight cutout */}
-
-            {/* Motorcycle Front Wheel */}
-            <rect x="80" y="62" width="5" height="14" rx="2.5" fill="currentColor" />
-          </svg>
-
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#f3f8fc] p-4 text-center select-none font-sans">
+        <div className="flex flex-col items-center w-full max-w-sm mt-4">
+          {/* Uploaded Logo */}
+          <img src="/icons/login.png" alt="Tayabas TODA Go Logo" className="w-24 h-auto object-contain mt-10 mb-2" />
+          
           {/* App Name */}
-          <h1 className="text-[#091b6f] font-extrabold text-[15px] tracking-wide text-center leading-none">
+          <h1 className="text-[#091b6f] font-bold text-lg tracking-wide text-center leading-none mt-1">
             Tayabas TODA Go
           </h1>
-          <p className="text-[#2563eb] text-[10px] font-bold tracking-wider uppercase mt-1">
+          <p className="text-[#2b4bb5] text-sm tracking-wide mt-1">
             Booking App
           </p>
 
           {/* Welcome Headers */}
-          <h2 className="text-[#091b6f] font-extrabold text-3xl tracking-wide mt-10 mb-1">
+          <h2 className="text-[#091b6f] font-extrabold text-[28px] tracking-tight mt-10 mb-1">
             Welcome Admin
           </h2>
-          <p className="text-slate-600 text-xs font-semibold mb-8">
+          <p className="text-[#091b6f]/80 text-sm font-medium mb-8">
             Log in to your admin account
           </p>
 
@@ -612,16 +583,16 @@ export default function Home() {
               setIsLoggedIn(true);
               setLoginError("");
             }}
-            className="w-full flex flex-col gap-4"
+            className="w-full flex flex-col gap-5"
             autoComplete="off"
           >
             {/* Email Field */}
             <div className="flex flex-col gap-1.5 w-full">
-              <label className="text-[#091b6f]/80 text-xs font-extrabold self-start pl-1">
+              <label className="text-[#091b6f] text-sm font-medium self-start pl-1">
                 Email
               </label>
-              <div className="bg-[#040a5a] text-white rounded-2xl flex items-center px-4.5 py-3.5 shadow-inner w-full border border-[#040a5a] focus-within:ring-2 focus-within:ring-blue-400 transition-all">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80 mr-3 shrink-0">
+              <div className="bg-[#091b6f] text-white rounded-2xl flex items-center px-4 py-3.5 w-full transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/80 mr-3 shrink-0">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
@@ -633,7 +604,7 @@ export default function Home() {
                     setLoginEmail(e.target.value);
                     if (loginError) setLoginError("");
                   }}
-                  className="bg-transparent border-none outline-none text-white placeholder-white/40 text-sm font-semibold w-full"
+                  className="bg-transparent border-none outline-none text-white placeholder-white/50 text-sm font-semibold w-full"
                   style={{ backgroundColor: "transparent", color: "white" }}
                   autoComplete="off"
                 />
@@ -642,11 +613,11 @@ export default function Home() {
 
             {/* Password Field */}
             <div className="flex flex-col gap-1.5 w-full">
-              <label className="text-[#091b6f]/80 text-xs font-extrabold self-start pl-1">
+              <label className="text-[#091b6f] text-sm font-medium self-start pl-1">
                 Password
               </label>
-              <div className="bg-[#040a5a] text-white rounded-2xl flex items-center px-4.5 py-3.5 shadow-inner w-full border border-[#040a5a] focus-within:ring-2 focus-within:ring-blue-400 transition-all relative">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80 mr-3 shrink-0">
+              <div className="bg-[#091b6f] text-white rounded-2xl flex items-center px-4 py-3.5 w-full transition-all relative">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/80 mr-3 shrink-0">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
@@ -658,7 +629,7 @@ export default function Home() {
                     setLoginPassword(e.target.value);
                     if (loginError) setLoginError("");
                   }}
-                  className="bg-transparent border-none outline-none text-white placeholder-white/40 text-sm font-semibold w-full pr-10"
+                  className="bg-transparent border-none outline-none text-white placeholder-white/50 text-sm font-semibold w-full pr-10"
                   style={{ backgroundColor: "transparent", color: "white" }}
                   autoComplete="off"
                 />
@@ -668,7 +639,7 @@ export default function Home() {
                   className="absolute right-4 text-white/70 hover:text-white transition-colors cursor-pointer"
                   aria-label="Toggle Password Visibility"
                 >
-                  {showPassword ? (
+                  {!showPassword ? (
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                       <circle cx="12" cy="12" r="3" />
@@ -685,7 +656,7 @@ export default function Home() {
 
             {/* Error Message */}
             {loginError && (
-              <p className="text-rose-600 text-xs font-bold text-center mt-1">
+              <p className="text-rose-600 text-xs font-bold text-center">
                 {loginError}
               </p>
             )}
@@ -693,7 +664,7 @@ export default function Home() {
             {/* Login Button */}
             <button
               type="submit"
-              className="bg-[#4f73f6] hover:bg-blue-600 active:bg-blue-700 text-white font-extrabold text-sm py-4 px-6 rounded-2xl w-full shadow-md hover:shadow-lg transition-all cursor-pointer mt-4"
+              className="bg-[#5b7af5] hover:bg-[#4f73f6] active:bg-blue-700 text-white font-extrabold text-base py-4 px-6 rounded-2xl w-full shadow-md hover:shadow-lg transition-all cursor-pointer mt-4"
             >
               Login
             </button>
@@ -782,11 +753,11 @@ export default function Home() {
           ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
           shadow-lg md:shadow-none
         `}>
-          <nav className="flex-1 py-4 flex flex-col gap-0.5">
+          <nav className="flex-1 py-4 flex flex-col gap-1">
             {/* Dashboard Tab */}
             <button
               onClick={() => { setActiveTab("dashboard"); setMobileMenuOpen(false); }}
-              className={`flex items-center gap-4 px-6 py-3.5 font-bold transition-all text-left border-l-4 ${activeTab === "dashboard"
+              className={`flex items-center gap-3 px-5 py-3 font-bold transition-all text-left border-l-4 w-full ${activeTab === "dashboard"
                 ? "bg-white text-[#091b6f] border-[#091b6f] shadow-sm"
                 : "text-[#091b6f] border-transparent hover:bg-white/40"
                 }`}
@@ -801,7 +772,7 @@ export default function Home() {
             {/* Create Driver Account Tab */}
             <button
               onClick={() => { setShowAddDriverModal(true); setMobileMenuOpen(false); }}
-              className={`flex items-center gap-4 px-6 py-3.5 font-bold transition-all text-left border-l-4 cursor-pointer w-full ${showAddDriverModal
+              className={`flex items-center gap-3 px-5 py-3 font-bold transition-all text-left border-l-4 cursor-pointer w-full ${showAddDriverModal
                 ? "bg-white text-[#091b6f] border-[#091b6f] shadow-xs"
                 : "text-[#091b6f] border-transparent hover:bg-white/40"
                 }`}
@@ -819,7 +790,7 @@ export default function Home() {
             {/* Ride Requests Tab */}
             <button
               onClick={() => { setActiveTab("ride-requests"); setMobileMenuOpen(false); }}
-              className={`flex items-center gap-4 px-6 py-3.5 font-bold transition-all text-left border-l-4 cursor-pointer w-full ${activeTab === "ride-requests"
+              className={`flex items-center gap-3 px-5 py-3 font-bold transition-all text-left border-l-4 cursor-pointer w-full ${activeTab === "ride-requests"
                 ? "bg-white text-[#091b6f] border-[#091b6f] shadow-xs"
                 : "text-[#091b6f] border-transparent hover:bg-white/40"
                 }`}
@@ -834,7 +805,7 @@ export default function Home() {
             {/* Earnings Tab */}
             <button
               onClick={() => { setActiveTab("earnings"); setMobileMenuOpen(false); }}
-              className={`flex items-center gap-4 px-6 py-3.5 font-bold transition-all text-left border-l-4 cursor-pointer w-full ${activeTab === "earnings"
+              className={`flex items-center gap-3 px-5 py-3 font-bold transition-all text-left border-l-4 cursor-pointer w-full ${activeTab === "earnings"
                 ? "bg-white text-[#091b6f] border-[#091b6f] shadow-xs"
                 : "text-[#091b6f] border-transparent hover:bg-white/40"
                 }`}
@@ -855,12 +826,12 @@ export default function Home() {
                   setUsersSubTab("all");
                   setUsersSidebarExpanded(!usersSidebarExpanded);
                 }}
-                className={`flex items-center justify-between px-6 py-3.5 font-bold transition-all text-left border-l-4 cursor-pointer w-full ${activeTab === "users"
+                className={`flex items-center justify-between px-5 py-3 font-bold transition-all text-left border-l-4 cursor-pointer w-full ${activeTab === "users"
                   ? "bg-white text-[#091b6f] border-[#091b6f] shadow-xs"
                   : "text-[#091b6f] border-transparent hover:bg-white/40"
                   }`}
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                     <circle cx="9" cy="7" r="4" />
@@ -888,7 +859,7 @@ export default function Home() {
                   {/* Drivers Sub-tab */}
                   <button
                     onClick={() => { setActiveTab("users"); setUsersSubTab("drivers"); setMobileMenuOpen(false); }}
-                    className={`flex items-center gap-3 px-6 py-2.5 text-sm font-semibold transition-all text-left border-l-2 cursor-pointer w-full ${activeTab === "users" && usersSubTab === "drivers"
+                    className={`flex items-center gap-3 px-5 py-2.5 text-sm font-semibold transition-all text-left border-l-2 cursor-pointer w-full ${activeTab === "users" && usersSubTab === "drivers"
                       ? "text-[#091b6f] border-[#091b6f] font-bold"
                       : "text-[#091b6f]/70 border-transparent hover:text-[#091b6f] hover:bg-white/20"
                       }`}
@@ -902,7 +873,7 @@ export default function Home() {
                   {/* Passengers Sub-tab */}
                   <button
                     onClick={() => { setActiveTab("users"); setUsersSubTab("passengers"); setMobileMenuOpen(false); }}
-                    className={`flex items-center gap-3 px-6 py-2.5 text-sm font-semibold transition-all text-left border-l-2 cursor-pointer w-full ${activeTab === "users" && usersSubTab === "passengers"
+                    className={`flex items-center gap-3 px-5 py-2.5 text-sm font-semibold transition-all text-left border-l-2 cursor-pointer w-full ${activeTab === "users" && usersSubTab === "passengers"
                       ? "text-[#091b6f] border-[#091b6f] font-bold"
                       : "text-[#091b6f]/70 border-transparent hover:text-[#091b6f] hover:bg-white/20"
                       }`}
@@ -928,25 +899,32 @@ export default function Home() {
         )}
 
         {/* Main Content Workspace */}
-        <main className="flex-1 p-6 overflow-y-auto bg-[#f0f6ff] transition-all relative">
+        <main className="flex-1 p-6 overflow-y-auto bg-[#f0f6ff] transition-all relative min-h-0">
 
           {/* Active Tab: Dashboard */}
           {activeTab === "dashboard" && (
             <div className="flex flex-col gap-6 max-w-7xl mx-auto">
 
               {/* Stat Cards Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {/* Total Drivers */}
                 {/* Total Drivers */}
                 <div
                   onClick={() => setActiveStatModal("total-drivers")}
-                  className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] hover:border-amber-200 transition-all duration-200 cursor-pointer"
+                  className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-5 hover:shadow-md hover:scale-[1.02] hover:border-amber-200 transition-all duration-200 cursor-pointer"
                 >
-                  <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center text-amber-500 shrink-0">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                      <circle cx="12" cy="7" r="4" />
-                      <path d="M8 2h8" />
-                    </svg>
+                  <div className="relative w-16 h-16 bg-[#f5efd7] rounded-full flex items-center justify-center shrink-0 overflow-hidden">
+                    <img
+                      src="/icons/total_drivers.png"
+                      alt="Total Drivers"
+                      className="absolute select-none pointer-events-none max-w-none"
+                      style={{
+                        width: '46.7px',
+                        height: '58.4px',
+                        left: '10.5px',
+                        top: '10.8px'
+                      }}
+                    />
                   </div>
                   <div>
                     <p className="text-slate-500 font-medium text-sm">Total drivers</p>
@@ -957,13 +935,20 @@ export default function Home() {
                 {/* Active Drivers */}
                 <div
                   onClick={() => setActiveStatModal("active-drivers")}
-                  className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] hover:border-emerald-200 transition-all duration-200 cursor-pointer"
+                  className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-5 hover:shadow-md hover:scale-[1.02] hover:border-emerald-200 transition-all duration-200 cursor-pointer"
                 >
-                  <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500 shrink-0">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
-                      <line x1="12" y1="2" x2="12" y2="12" />
-                    </svg>
+                  <div className="relative w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center shrink-0 overflow-hidden">
+                    <img
+                      src="/icons/active_drivers.png"
+                      alt="Active Drivers"
+                      className="absolute select-none pointer-events-none max-w-none"
+                      style={{
+                        width: '69.5px',
+                        height: '87px',
+                        left: '0.7px',
+                        top: '6.2px'
+                      }}
+                    />
                   </div>
                   <div>
                     <p className="text-slate-500 font-medium text-sm">Active Drivers</p>
@@ -974,15 +959,20 @@ export default function Home() {
                 {/* Users */}
                 <div
                   onClick={() => setActiveStatModal("users")}
-                  className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] hover:border-indigo-200 transition-all duration-200 cursor-pointer"
+                  className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-5 hover:shadow-md hover:scale-[1.02] hover:border-indigo-200 transition-all duration-200 cursor-pointer"
                 >
-                  <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-500 shrink-0">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
+                  <div className="relative w-16 h-16 bg-[#c8d7ff] rounded-full flex items-center justify-center shrink-0 overflow-hidden">
+                    <img
+                      src="/icons/users.png"
+                      alt="Users"
+                      className="absolute select-none pointer-events-none max-w-none"
+                      style={{
+                        width: '40.9px',
+                        height: '51.1px',
+                        left: '11.3px',
+                        top: '6.5px'
+                      }}
+                    />
                   </div>
                   <div>
                     <p className="text-slate-500 font-medium text-sm">Users</p>
@@ -993,15 +983,20 @@ export default function Home() {
                 {/* Trips Today */}
                 <div
                   onClick={() => setActiveStatModal("trips-today")}
-                  className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:scale-[1.02] hover:border-rose-200 transition-all duration-200 cursor-pointer"
+                  className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-5 hover:shadow-md hover:scale-[1.02] hover:border-rose-200 transition-all duration-200 cursor-pointer"
                 >
-                  <div className="w-12 h-12 bg-rose-50 rounded-full flex items-center justify-center text-rose-500 shrink-0">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="5.5" cy="18.5" r="2.5" />
-                      <circle cx="18.5" cy="18.5" r="2.5" />
-                      <path d="M5.5 16h13M8.5 10l2-4h5v4" />
-                      <path d="M12 10v6" />
-                    </svg>
+                  <div className="relative w-16 h-16 bg-[#ffe7cc] rounded-full flex items-center justify-center shrink-0 overflow-hidden">
+                    <img
+                      src="/icons/trips_today.png"
+                      alt="Trips Today"
+                      className="absolute select-none pointer-events-none max-w-none"
+                      style={{
+                        width: '41.6px',
+                        height: '52px',
+                        left: '10.1px',
+                        top: '4.1px'
+                      }}
+                    />
                   </div>
                   <div>
                     <p className="text-slate-500 font-medium text-sm">Trips Today</p>
@@ -1038,7 +1033,7 @@ export default function Home() {
                         <line x1="30" y1="60" x2="420" y2="60" stroke="#f1f5f9" strokeWidth="1" />
                         <line x1="30" y1="100" x2="420" y2="100" stroke="#f1f5f9" strokeWidth="1" />
                         <line x1="30" y1="140" x2="420" y2="140" stroke="#f1f5f9" strokeWidth="1" />
-                        <line x1="30" y1="150" x2="420" y2="150" stroke="#94a3b8" strokeWidth="1" />
+                        <line x1="30" y1="150" x2="420" y2="150" stroke="#4967cf" strokeWidth="1" />
 
                         {/* Y-Axis Labels */}
                         <text x="15" y="24" className="text-[10px] fill-slate-400 font-bold text-right" textAnchor="end">40</text>
@@ -1191,7 +1186,7 @@ export default function Home() {
 
                     <button
                       onClick={() => setShowAddDriverModal(true)}
-                      className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2 group cursor-pointer hover:scale-[1.01]"
+                      className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-3 group cursor-pointer hover:scale-[1.01]"
                     >
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="group-hover:rotate-90 transition-transform duration-200">
                         <line x1="12" y1="5" x2="12" y2="19" />
@@ -1215,13 +1210,14 @@ export default function Home() {
                     </div>
 
                     {/* Table */}
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse">
+                    <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                      <table className="w-full text-left border-collapse border-b border-slate-50">
                         <thead>
                           <tr className="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
                             <th className="pb-3 pl-3 text-left">Driver</th>
                             <th className="pb-3 px-3 text-left">TODA</th>
-                            <th className="pb-3 text-right pr-3">Status</th>
+                            <th className="pb-3 text-center">Status</th>
+                            <th className="pb-3 text-right pr-3">Actions</th>
                           </tr>
                         </thead>
                         <tbody className="text-sm font-semibold divide-y divide-slate-50">
@@ -1232,6 +1228,11 @@ export default function Home() {
                                 <p className="text-[10px] text-slate-400">{d.bodyNumber}</p>
                               </td>
                               <td className="py-3.5 px-3 text-left text-slate-600 max-w-[150px] truncate" title={d.toda}>{d.toda}</td>
+                              <td className="py-3.5 px-3 text-center">
+                                <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${d.status === "Active" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-rose-50 text-rose-600 border border-rose-100"}`}>
+                                  {d.status}
+                                </span>
+                              </td>
                               <td className="py-3.5 pr-3 text-right">
                                 <div className="flex items-center justify-end gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
                                   <button
@@ -1249,13 +1250,13 @@ export default function Home() {
                                       });
                                       setShowEditDriverModal(true);
                                     }}
-                                    className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-bold hover:bg-blue-100 transition-colors"
+                                    className="px-3 py-1 bg-blue-50 text-blue-600 rounded-md text-[10px] font-bold hover:bg-blue-100 transition-colors cursor-pointer"
                                   >
                                     Edit
                                   </button>
                                   <button
                                     onClick={() => handleDeactivateToggle(d.id)}
-                                    className={`px-2 py-0.5 rounded text-[10px] font-bold transition-colors ${d.status === "Active"
+                                    className={`px-3 py-1 rounded-md text-[10px] font-bold transition-colors cursor-pointer ${d.status === "Active"
                                       ? "text-rose-500 bg-rose-50 hover:bg-rose-100"
                                       : "text-emerald-500 bg-emerald-50 hover:bg-emerald-100"
                                       }`}
@@ -1304,7 +1305,7 @@ export default function Home() {
                         </div>
                         <button
                           onClick={() => setActiveTab("earnings")}
-                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow-sm hover:shadow transition-all"
+                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs px-4 py-2 rounded-lg shadow-sm hover:shadow transition-all"
                         >
                           View Earnings
                         </button>
@@ -1326,8 +1327,8 @@ export default function Home() {
             <div className="flex flex-col gap-6 max-w-7xl mx-auto">
 
               {/* Category Filter Buttons Row (Matches Image 2) */}
-              <div className="bg-[#b3e2ff]/30 p-2 rounded-xl flex flex-wrap items-center gap-2 border border-[#b3e2ff]/50">
-                <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+              <div className="bg-[#b3e2ff]/30 p-3 rounded-xl flex flex-wrap items-center gap-3 border border-[#b3e2ff]/50">
+                <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
                   {[
                     { key: "Ongoing", label: "Ongoing (15)" },
                     { key: "Scheduled", label: "Scheduled" },
@@ -1340,7 +1341,7 @@ export default function Home() {
                         setStatusFilter(tab.key);
                         setRequestsPage(1);
                       }}
-                      className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${statusFilter === tab.key
+                      className={`px-4 py-2 rounded-md text-xs font-bold transition-all cursor-pointer ${statusFilter === tab.key
                         ? "bg-[#091b6f] text-white shadow-sm"
                         : "text-slate-600 hover:text-[#091b6f]"
                         }`}
@@ -1388,7 +1389,7 @@ export default function Home() {
                 {/* Apply Filter Button */}
                 <button
                   onClick={() => setRequestsPage(1)}
-                  className="px-4 py-1.5 bg-[#4c75f2] hover:bg-blue-600 text-white font-bold text-xs rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
+                  className="px-5 py-2 bg-[#4c75f2] hover:bg-blue-600 text-white font-bold text-xs rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
                 >
                   Apply Filter
                 </button>
@@ -1443,13 +1444,13 @@ export default function Home() {
                         .slice((requestsPage - 1) * 9, requestsPage * 9)
                         .map((r) => (
                           <tr key={r.id} className="hover:bg-slate-50/50 transition-colors">
-                            <td className="py-4 pl-3 text-[#091b6f] font-bold">{r.passenger}</td>
-                            <td className="py-4 text-slate-600">{r.location}</td>
-                            <td className="py-4 text-slate-500">{r.destination}</td>
-                            <td className="py-4 text-slate-700">{r.driver}</td>
-                            <td className="py-4 text-slate-600">{r.toda}</td>
-                            <td className="py-4">
-                              <span className={`inline-block px-3 py-0.5 rounded-full text-[10px] font-bold ${r.status === "Completed" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" :
+                            <td className="py-5 pl-3 text-[#091b6f] font-bold">{r.passenger}</td>
+                            <td className="py-5 px-2 text-slate-600">{r.location}</td>
+                            <td className="py-5 px-2 text-slate-500">{r.destination}</td>
+                            <td className="py-5 px-2 text-slate-700">{r.driver}</td>
+                            <td className="py-5 px-2 text-slate-600">{r.toda}</td>
+                            <td className="py-5">
+                              <span className={`inline-block px-4 py-1 rounded-full text-[10px] font-bold ${r.status === "Completed" ? "bg-emerald-50 text-emerald-600 border border-emerald-100" :
                                 r.status === "In Transit" ? "bg-emerald-500 text-white border border-emerald-600" :
                                   r.status === "Pending" ? "bg-amber-100 text-amber-600 border border-amber-200" :
                                     r.status === "Scheduled" ? "bg-indigo-50 text-indigo-600 border border-indigo-100" :
@@ -1458,13 +1459,13 @@ export default function Home() {
                                 {r.status}
                               </span>
                             </td>
-                            <td className="py-4 text-center pr-3">
+                            <td className="py-5 text-center pr-3">
                               <button
                                 onClick={() => {
                                   setViewingRequest(r);
                                   setShowViewRequestModal(true);
                                 }}
-                                className="px-3.5 py-1 bg-[#4c75f2] hover:bg-blue-600 text-white rounded-lg text-xs font-bold shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                                className="px-5 py-2 bg-[#4c75f2] hover:bg-blue-600 text-white rounded-lg text-xs font-bold shadow-xs hover:shadow-sm transition-all cursor-pointer"
                               >
                                 View
                               </button>
@@ -1473,7 +1474,7 @@ export default function Home() {
                         ))}
                       {filteredRequests.length === 0 && (
                         <tr>
-                          <td colSpan={7} className="py-12 text-center text-slate-400 font-medium">
+                          <td colSpan={7} className="py-16 text-center text-slate-400 font-medium">
                             No requests found matching your query.
                           </td>
                         </tr>
@@ -1484,24 +1485,24 @@ export default function Home() {
 
                 {/* Pagination (Matches Image 2 layout) */}
                 {filteredRequests.length > 0 && (
-                  <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-2">
+                  <div className="flex items-center justify-between border-t border-slate-100 pt-6 mt-2">
                     <button
                       onClick={() => setRequestsPage(prev => Math.max(prev - 1, 1))}
                       disabled={requestsPage === 1}
                       className="text-xs font-bold text-blue-500 hover:underline disabled:opacity-30 disabled:no-underline cursor-pointer flex items-center gap-1"
                     >
-                      &lt;&lt; Previos
+                      &lt;&lt; Previous
                     </button>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <span className="text-xs text-slate-500 font-bold">
                         Page {requestsPage} of {Math.ceil(filteredRequests.length / 9)}
                       </span>
 
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => setRequestsPage(1)}
-                          className={`w-7 h-7 flex items-center justify-center text-xs font-bold rounded-lg border ${requestsPage === 1
+                          className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-lg border ${requestsPage === 1
                             ? "bg-slate-100 border-slate-200 text-[#091b6f]"
                             : "border-slate-200 hover:bg-slate-50 text-[#091b6f] cursor-pointer"
                             }`}
@@ -1513,7 +1514,7 @@ export default function Home() {
                           <button
                             key={p}
                             onClick={() => setRequestsPage(p)}
-                            className={`w-7 h-7 flex items-center justify-center text-xs font-bold rounded-lg border ${requestsPage === p
+                            className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-lg border ${requestsPage === p
                               ? "bg-blue-100 border-blue-200 text-blue-600 font-extrabold"
                               : "border-slate-200 hover:bg-slate-50 text-slate-600 cursor-pointer"
                               }`}
@@ -1525,7 +1526,7 @@ export default function Home() {
                         <button
                           onClick={() => setRequestsPage(prev => Math.min(prev + 1, Math.ceil(filteredRequests.length / 9)))}
                           disabled={requestsPage === Math.ceil(filteredRequests.length / 9)}
-                          className={`w-7 h-7 flex items-center justify-center text-xs font-bold rounded-lg border ${requestsPage === Math.ceil(filteredRequests.length / 9)
+                          className={`w-8 h-8 flex items-center justify-center text-xs font-bold rounded-lg border ${requestsPage === Math.ceil(filteredRequests.length / 9)
                             ? "opacity-30 border-slate-200 text-slate-400"
                             : "border-slate-200 hover:bg-slate-50 text-[#091b6f] cursor-pointer"
                             }`}
@@ -1544,43 +1545,43 @@ export default function Home() {
 
           {/* Active Tab: Earnings */}
           {activeTab === "earnings" && (
-            <div className="flex flex-col gap-6 max-w-7xl mx-auto">
+            <div className="flex flex-col gap-8 max-w-7xl mx-auto">
 
               {/* Stat Cards Row (Matches Image 3) */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {/* Total Earnings */}
                 <div
                   onClick={() => setActiveStatModal("total-earnings")}
-                  className="bg-[#091b6f] text-white p-6 rounded-2xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
+                  className="bg-[#091b6f] text-white p-8 rounded-3xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
                 >
                   <p className="text-sky-200 font-bold text-xs uppercase tracking-wider">Total Earnings</p>
-                  <p className="text-4xl font-extrabold mt-2 font-sans">₱ 50,000</p>
-                  <span className="text-[10px] text-sky-200/60 font-semibold mt-4">Active Volume baseline</span>
+                  <p className="text-4xl font-extrabold mt-3 font-sans">₱ 50,000</p>
+                  <span className="text-[11px] text-sky-200/60 font-semibold mt-6">Active Volume baseline</span>
                 </div>
 
                 {/* Total Completed Rides */}
                 <div
                   onClick={() => setActiveStatModal("completed-rides")}
-                  className="bg-[#091b6f] text-white p-6 rounded-2xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
+                  className="bg-[#091b6f] text-white p-8 rounded-3xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
                 >
                   <p className="text-sky-200 font-bold text-xs uppercase tracking-wider">Total Completed Rides</p>
-                  <p className="text-4xl font-extrabold mt-2 font-sans">1,250</p>
-                  <span className="text-[10px] text-sky-200/60 font-semibold mt-4">Total platform transactions</span>
+                  <p className="text-4xl font-extrabold mt-3 font-sans">1,250</p>
+                  <span className="text-[11px] text-sky-200/60 font-semibold mt-6">Total platform transactions</span>
                 </div>
 
                 {/* Total Commission Earned */}
                 <div
                   onClick={() => setActiveStatModal("commission-earned")}
-                  className="bg-[#091b6f] text-white p-6 rounded-2xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
+                  className="bg-[#091b6f] text-white p-8 rounded-3xl shadow-sm border border-blue-900/10 flex flex-col justify-between hover:shadow-md hover:scale-[1.02] hover:border-blue-700 transition-all duration-200 cursor-pointer"
                 >
                   <p className="text-sky-200 font-bold text-xs uppercase tracking-wider">Total Commission Earned</p>
-                  <p className="text-4xl font-extrabold mt-2 font-sans">₱ 10,000</p>
-                  <span className="text-[10px] text-sky-200/60 font-semibold mt-4">15% TODA commission margin</span>
+                  <p className="text-4xl font-extrabold mt-3 font-sans">₱ 10,000</p>
+                  <span className="text-[11px] text-sky-200/60 font-semibold mt-6">15% TODA commission margin</span>
                 </div>
               </div>
 
               {/* Filters Bar (Matches Image 3) */}
-              <div className="bg-[#b3e2ff]/30 p-3 rounded-xl flex flex-wrap items-center gap-3 border border-[#b3e2ff]/50">
+              <div className="bg-[#b3e2ff]/30 p-4 rounded-2xl flex flex-wrap items-center gap-4 border border-[#b3e2ff]/50">
 
                 {/* TODA Dropdown Filter */}
                 <div className="relative">
@@ -1590,15 +1591,15 @@ export default function Home() {
                       setEarningsTodaFilter(e.target.value);
                       setEarningsPage(1);
                     }}
-                    className="pl-3.5 pr-8 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-[#091b6f] cursor-pointer appearance-none outline-hidden focus:border-blue-500"
+                    className="pl-4 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-[#091b6f] cursor-pointer appearance-none outline-hidden focus:border-blue-500"
                   >
                     <option value="All">All TODAs</option>
                     <option value="LHITC-TODA">LHITC-TODA</option>
                     <option value="BYPASS ILAYANG BAGUIO-TODA">BYPASS ILAYANG BAGUIO-TODA</option>
                     <option value="CHOT-TODA">CHOT-TODA</option>
                   </select>
-                  <span className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-400">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
+                  <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
                   </span>
                 </div>
 
@@ -1610,15 +1611,15 @@ export default function Home() {
                       setEarningsDriverFilter(e.target.value);
                       setEarningsPage(1);
                     }}
-                    className="pl-3.5 pr-8 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-[#091b6f] cursor-pointer appearance-none outline-hidden focus:border-blue-500"
+                    className="pl-4 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-[#091b6f] cursor-pointer appearance-none outline-hidden focus:border-blue-500"
                   >
                     <option value="All">All Drivers</option>
                     {drivers.map(d => (
                       <option key={d.id} value={d.name}>{d.name}</option>
                     ))}
                   </select>
-                  <span className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-400">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
+                  <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
                   </span>
                 </div>
 
@@ -1627,40 +1628,40 @@ export default function Home() {
                   <select
                     value={earningsDateRange}
                     onChange={(e) => setEarningsDateRange(e.target.value)}
-                    className="pl-3.5 pr-8 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-[#091b6f] cursor-pointer appearance-none outline-hidden focus:border-blue-500"
+                    className="pl-4 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-[#091b6f] cursor-pointer appearance-none outline-hidden focus:border-blue-500"
                   >
                     <option value="April 1, 2024- April 30, 2026">April 1, 2024- April 30, 2026</option>
                     <option value="today">Today Only</option>
                     <option value="weekly">This Week</option>
                     <option value="monthly">This Month</option>
                   </select>
-                  <span className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-400">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
+                  <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
                   </span>
                 </div>
 
                 {/* Apply Filter Button */}
                 <button
                   onClick={() => setEarningsPage(1)}
-                  className="px-4 py-1.5 bg-[#4c75f2] hover:bg-blue-600 text-white font-bold text-xs rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
+                  className="px-6 py-2.5 bg-[#4c75f2] hover:bg-blue-600 text-white font-bold text-xs rounded-xl shadow-sm hover:shadow transition-all cursor-pointer"
                 >
                   Apply Filter
                 </button>
               </div>
 
               {/* Earnings Breakdown Table Card (Matches Image 3) */}
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col gap-4">
+              <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8 flex flex-col gap-6">
 
                 {/* Card Header with Download Report */}
                 <div className="flex items-center justify-between">
-                  <h3 className="text-[#091b6f] font-bold text-lg">Earnings Breakdown</h3>
+                  <h3 className="text-[#091b6f] font-bold text-xl">Earnings Breakdown</h3>
 
                   {/* Download Report Button */}
                   <button
                     onClick={handleDownloadReport}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#4c75f2] hover:bg-blue-600 text-white font-bold text-xs rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer"
+                    className="flex items-center gap-2.5 px-6 py-3 bg-[#4c75f2] hover:bg-blue-600 text-white font-bold text-xs rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer"
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                       <polyline points="7 10 12 15 17 10" />
                       <line x1="12" y1="15" x2="12" y2="3" />
@@ -1674,12 +1675,12 @@ export default function Home() {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                        <th className="pb-3 pl-3 text-left">Date</th>
-                        <th className="pb-3 px-3 text-left">TODA</th>
-                        <th className="pb-3 px-3 text-left">Completed Rides</th>
-                        <th className="pb-3 px-3 text-left">Total Earnings</th>
-                        <th className="pb-3 px-3 text-left">Commission Earned</th>
-                        <th className="pb-3 text-center pr-3">Actions</th>
+                        <th className="pb-5 pl-3 text-left">Date</th>
+                        <th className="pb-5 px-3 text-left">TODA</th>
+                        <th className="pb-5 px-3 text-left">Completed Rides</th>
+                        <th className="pb-5 px-3 text-left">Total Earnings</th>
+                        <th className="pb-5 px-3 text-left">Commission Earned</th>
+                        <th className="pb-5 text-center pr-3">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="text-sm font-semibold divide-y divide-slate-50">
@@ -1687,18 +1688,18 @@ export default function Home() {
                         .slice((earningsPage - 1) * 9, earningsPage * 9)
                         .map((r) => (
                           <tr key={r.id} className="hover:bg-slate-50/50 transition-colors">
-                            <td className="py-4.5 pl-3 text-left text-[#091b6f] font-semibold">{r.date}</td>
-                            <td className="py-4.5 px-3 text-left text-slate-600 max-w-[180px] truncate" title={r.toda}>{r.toda}</td>
-                            <td className="py-4.5 px-3 text-left text-slate-700">{r.completedRides}</td>
-                            <td className="py-4.5 px-3 text-left text-slate-800 font-bold">₱{r.totalEarnings.toLocaleString()}</td>
-                            <td className="py-4.5 px-3 text-left text-[#091b6f] font-extrabold">₱{r.commissionEarned.toLocaleString()}</td>
-                            <td className="py-4.5 text-center pr-3">
+                            <td className="py-6 pl-3 text-left text-[#091b6f] font-semibold">{r.date}</td>
+                            <td className="py-6 px-3 text-left text-slate-600 max-w-[180px] truncate" title={r.toda}>{r.toda}</td>
+                            <td className="py-6 px-3 text-left text-slate-700">{r.completedRides}</td>
+                            <td className="py-6 px-3 text-left text-slate-800 font-bold">₱{r.totalEarnings.toLocaleString()}</td>
+                            <td className="py-6 px-3 text-left text-[#091b6f] font-extrabold">₱{r.commissionEarned.toLocaleString()}</td>
+                            <td className="py-6 text-center pr-3">
                               <button
                                 onClick={() => {
                                   setViewingEarningsRecord(r);
                                   setShowViewEarningsModal(true);
                                 }}
-                                className="px-3.5 py-1 bg-[#4c75f2] hover:bg-blue-600 text-white rounded-lg text-xs font-bold shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                                className="px-5 py-2 bg-[#4c75f2] hover:bg-blue-600 text-white rounded-lg text-xs font-bold shadow-xs hover:shadow-sm transition-all cursor-pointer"
                               >
                                 View
                               </button>
@@ -1835,7 +1836,7 @@ export default function Home() {
               <div className="bg-[#b3e2ff]/30 p-3 rounded-xl flex flex-wrap items-center gap-3 border border-[#b3e2ff]/50">
 
                 {/* Category tabs */}
-                <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
                   {[
                     { key: "all", label: "All" },
                     { key: "drivers", label: "Drivers" },
@@ -1844,7 +1845,7 @@ export default function Home() {
                     <button
                       key={tab.key}
                       onClick={() => setUsersSubTab(tab.key as any)}
-                      className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${usersSubTab === tab.key
+                      className={`px-4 py-2 rounded-md text-xs font-bold transition-all cursor-pointer ${usersSubTab === tab.key
                         ? "bg-[#091b6f] text-white shadow-xs"
                         : "text-slate-600 hover:text-[#091b6f]"
                         }`}
@@ -1915,7 +1916,7 @@ export default function Home() {
                 {/* Apply Filter Button */}
                 <button
                   onClick={() => { setDriversPage(1); setPassengersPage(1); }}
-                  className="px-4 py-1.5 bg-[#4c75f2] hover:bg-blue-600 text-white font-bold text-xs rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
+                  className="px-5 py-2 bg-[#4c75f2] hover:bg-blue-600 text-white font-bold text-xs rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
                 >
                   Apply Filter
                 </button>
@@ -1925,7 +1926,7 @@ export default function Home() {
                   onClick={() => {
                     alert("Simulated registry list downloaded!");
                   }}
-                  className="ml-auto flex items-center gap-2 px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-[#091b6f] font-bold text-xs rounded-lg shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                  className="ml-auto flex items-center gap-2 px-5 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-[#091b6f] font-bold text-xs rounded-lg shadow-xs hover:shadow-sm transition-all cursor-pointer"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -1977,7 +1978,7 @@ export default function Home() {
                                     setViewingUserType("driver");
                                     setShowViewUserModal(true);
                                   }}
-                                  className="px-3.5 py-1 bg-[#4c75f2] hover:bg-blue-600 text-white rounded-lg text-xs font-bold shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                                  className="px-4 py-1.5 bg-[#4c75f2] hover:bg-blue-600 text-white rounded-lg text-xs font-bold shadow-xs hover:shadow-sm transition-all cursor-pointer"
                                 >
                                   View
                                 </button>
@@ -2076,7 +2077,7 @@ export default function Home() {
                                     setViewingUserType("passenger");
                                     setShowViewUserModal(true);
                                   }}
-                                  className="px-3.5 py-1 bg-[#4c75f2] hover:bg-blue-600 text-white rounded-lg text-xs font-bold shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                                  className="px-4 py-1.5 bg-[#4c75f2] hover:bg-blue-600 text-white rounded-lg text-xs font-bold shadow-xs hover:shadow-sm transition-all cursor-pointer"
                                 >
                                   View
                                 </button>
@@ -2353,17 +2354,17 @@ export default function Home() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-3 mt-6 pt-5 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShowAddDriverModal(false)}
-                  className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-bold text-sm transition-colors border border-transparent hover:border-slate-300"
+                  className="px-7 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-bold text-sm transition-colors border border-transparent hover:border-slate-300"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all hover:scale-[1.01]"
+                  className="px-7 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all hover:scale-[1.01]"
                 >
                   Create Account
                 </button>
@@ -2460,17 +2461,17 @@ export default function Home() {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-2 mt-4 pt-4 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-3 mt-5 pt-5 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => { setShowEditDriverModal(false); setEditingDriver(null); }}
-                  className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-500 rounded-lg font-bold text-sm transition-colors"
+                  className="px-6 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-500 rounded-xl font-bold text-sm transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-lg font-bold text-sm shadow-md transition-all hover:scale-[1.01]"
+                  className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl font-bold text-sm shadow-md transition-all hover:scale-[1.01]"
                 >
                   Save Changes
                 </button>
@@ -2573,11 +2574,11 @@ export default function Home() {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-2 mt-4 pt-4 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-3 mt-5 pt-5 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShowAddRequestModal(false)}
-                  className="px-5 py-2 border border-slate-200 hover:bg-slate-50 text-slate-500 rounded-xl font-bold text-sm transition-colors cursor-pointer"
+                  className="px-6 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-500 rounded-xl font-bold text-sm transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -2655,10 +2656,10 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="border-t border-slate-100 pt-4 flex items-center justify-end">
+              <div className="border-t border-slate-100 pt-5 mt-2 flex items-center justify-end">
                 <button
                   onClick={() => { setShowViewRequestModal(false); setViewingRequest(null); }}
-                  className="px-6 py-2 bg-[#091b6f] hover:bg-blue-800 text-white rounded-xl font-bold text-sm transition-colors cursor-pointer shadow-sm hover:shadow"
+                  className="px-6 py-2.5 bg-[#091b6f] hover:bg-blue-800 text-white rounded-xl font-bold text-sm transition-colors cursor-pointer shadow-sm hover:shadow"
                 >
                   Close Audit Detail
                 </button>
@@ -2838,10 +2839,10 @@ export default function Home() {
                 )}
               </div>
 
-              <div className="border-t border-slate-100 pt-4 flex items-center justify-end mt-2">
+              <div className="border-t border-slate-100 pt-5 mt-2 flex items-center justify-end">
                 <button
                   onClick={() => { setShowViewUserModal(false); setViewingUser(null); setViewingUserType(null); }}
-                  className="px-5 py-2.5 bg-[#091b6f] hover:bg-blue-800 text-white rounded-xl font-bold text-xs transition-colors cursor-pointer shadow-xs hover:shadow"
+                  className="px-6 py-2.5 bg-[#091b6f] hover:bg-blue-800 text-white rounded-xl font-bold text-sm transition-colors cursor-pointer shadow-xs hover:shadow"
                 >
                   Close Account Audit
                 </button>
@@ -2992,7 +2993,7 @@ export default function Home() {
                     setLoginError("");
                   }
                 }}
-                className="w-full bg-[#ef2b2b] hover:bg-red-600 text-white font-bold py-3 px-6 rounded-2xl shadow-md hover:shadow-lg transition-all cursor-pointer text-center text-sm uppercase tracking-wider"
+                className="w-full bg-[#ef2b2b] hover:bg-red-600 text-white font-bold py-3.5 px-6 rounded-2xl shadow-md hover:shadow-lg transition-all cursor-pointer text-center text-sm uppercase tracking-wider"
               >
                 Logout
               </button>
@@ -3022,7 +3023,7 @@ export default function Home() {
                         className="absolute right-3 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
                         aria-label="Toggle Current Password Visibility"
                       >
-                        {showCurrentPassword ? (
+                        {!showCurrentPassword ? (
                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                             <circle cx="12" cy="12" r="3" />
@@ -3052,7 +3053,7 @@ export default function Home() {
                         className="absolute right-3 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
                         aria-label="Toggle New Password Visibility"
                       >
-                        {showNewPassword ? (
+                        {!showNewPassword ? (
                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                             <circle cx="12" cy="12" r="3" />
@@ -3082,7 +3083,7 @@ export default function Home() {
                         className="absolute right-3 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
                         aria-label="Toggle Confirm Password Visibility"
                       >
-                        {showConfirmPassword ? (
+                        {!showConfirmPassword ? (
                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                             <circle cx="12" cy="12" r="3" />
@@ -3100,11 +3101,11 @@ export default function Home() {
                     <p className="text-rose-500 text-xs font-bold text-center">{profileActionError}</p>
                   )}
                 </div>
-                <div className="flex items-center justify-end gap-2 mt-4">
+                <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => setShowChangePasswordSubModal(false)}
-                    className="px-4 py-2 border border-slate-250 hover:bg-slate-50 text-slate-500 rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                    className="px-5 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-500 rounded-xl font-bold text-sm transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -3127,7 +3128,7 @@ export default function Home() {
                       setShowChangePasswordSubModal(false);
                       alert("Password updated successfully!");
                     }}
-                    className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                    className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-colors cursor-pointer"
                   >
                     Save Password
                   </button>
@@ -3154,11 +3155,11 @@ export default function Home() {
                     <p className="text-rose-500 text-xs font-bold text-center mt-2">{profileActionError}</p>
                   )}
                 </div>
-                <div className="flex items-center justify-end gap-2 mt-4">
+                <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => setShowEditNameSubModal(false)}
-                    className="px-4 py-2 border border-slate-250 hover:bg-slate-50 text-slate-500 rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                    className="px-5 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-500 rounded-xl font-bold text-sm transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -3173,7 +3174,7 @@ export default function Home() {
                       setShowEditNameSubModal(false);
                       alert("Administrator name updated!");
                     }}
-                    className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                    className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-colors cursor-pointer"
                   >
                     Save Name
                   </button>
@@ -3279,11 +3280,11 @@ export default function Home() {
                     </button>
                   ))}
                 </div>
-                <div className="flex justify-end mt-2">
+                <div className="flex justify-end mt-3 pt-4 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => setShowChangePictureSubModal(false)}
-                    className="px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                    className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-xl font-bold text-sm transition-colors cursor-pointer"
                   >
                     Close Selection
                   </button>
@@ -3358,10 +3359,10 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="border-t border-slate-100 pt-4 flex items-center justify-end">
+              <div className="border-t border-slate-100 pt-5 mt-2 flex items-center justify-end">
                 <button
                   onClick={() => { setShowViewEarningsModal(false); setViewingEarningsRecord(null); }}
-                  className="px-6 py-2 bg-[#091b6f] hover:bg-blue-800 text-white rounded-xl font-bold text-sm transition-colors cursor-pointer shadow-sm hover:shadow"
+                  className="px-6 py-2.5 bg-[#091b6f] hover:bg-blue-800 text-white rounded-xl font-bold text-sm transition-colors cursor-pointer shadow-sm hover:shadow"
                 >
                   Close Report
                 </button>
